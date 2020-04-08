@@ -11,6 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 public class MainActivity extends Activity {
 
     private final static String TAG = "MainActivity";
@@ -61,6 +63,17 @@ public class MainActivity extends Activity {
         mQuestion = mQuestionBank[mIndex].getQuestionID();
         mQuestionTextView.setText(mQuestion);
 
+        //solve the rotation(of screen) problem
+        if (savedInstanceState != null) {
+            mScore = savedInstanceState.getInt("ScoreKey");
+            mIndex = savedInstanceState.getInt("IndexKey");
+            mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
+        } else  {
+            mScore = 0;
+            mIndex = 0;
+        }
+
+        //evoked when true button is pressed
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +84,7 @@ public class MainActivity extends Activity {
             }
         });
 
+        //evoked when false button is pressed
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,4 +142,13 @@ public class MainActivity extends Activity {
         }
     }
 
+    /*
+    * This function will called automatically when the screen is roted*/
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("ScoreKey", mScore);
+        outState.putInt("IndexKey", mIndex);
+    }
 }
